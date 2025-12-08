@@ -30,6 +30,10 @@ require("lazy").setup({
       vim.keymap.set("n", "<C-n>", ":NvimTreeToggle<CR>", { silent = true, desc = "Toggle file tree" })
     end,
   },
+{
+  "nvim-tree/nvim-web-devicons",
+  lazy = true,
+},
 
       -- TABS BAR (like Sublime / VS Code)
   {
@@ -76,35 +80,42 @@ require("lazy").setup({
   },
   -- ---------------------------------------------
   -- STATUSLINE
-  {
-    "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("lualine").setup({
-        options = {
-          theme = "auto",
-          icons_enabled = true,
-        },
-      })
+-- FILE ICONS
+{
+  "nvim-tree/nvim-web-devicons",
+  lazy = true,
+  config = function()
+    require("nvim-web-devicons").setup({
+      default = true,  -- use default icons for everything
+    })
   end,
-  },
+},
 
-  -- TREESITTER (syntax & better highlight for many languages)
-  {
-    "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
-    config = function()
-      require("nvim-treesitter.configs").setup({
-        ensure_installed = {
-          "python", "lua", "javascript", "typescript",
-          "html", "css", "java", "c", "cpp",
-          "bash", "json", "markdown", "vim", "yaml",
+-- FILE EXPLORER (NvimTree) WITH ICONS
+
+{
+  "nvim-tree/nvim-tree.lua",
+  dependencies = { "nvim-tree/nvim-web-devicons" },
+  config = function()
+    require("nvim-tree").setup({
+      renderer = {
+        highlight_git = true,
+        indent_markers = { enable = true },
+        icons = {
+          show = {
+            file = true,
+            folder = true,
+            folder_arrow = true,
+            git = true,
+          },
         },
-        highlight = { enable = true },
-        indent = { enable = true },
-      })
-    end,
-  },
+      },
+    })
+
+    vim.keymap.set("n", "<C-n>", ":NvimTreeToggle<CR>", { silent = true, noremap = true })
+  end,
+},
+
 
   -- TELESCOPE (fuzzy finder)
   {
@@ -284,6 +295,20 @@ require("lazy").setup({
 
 
 })
+
+require("nvim-tree").setup({
+  renderer = {
+    icons = {
+      show = {
+        file = true,
+        folder = true,
+        folder_arrow = true,
+        git = true,
+      },
+    },
+  },
+})
+
 
 -- =========================
 --  Theme switching
