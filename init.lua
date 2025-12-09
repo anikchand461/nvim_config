@@ -60,6 +60,16 @@ require("lazy").setup({
       require("Comment").setup()
     end,
   },
+-- GitHub themes
+{
+  "projekt0n/github-nvim-theme",
+  lazy = true,           -- lazy load (we'll set the colorscheme when we want)
+  priority = 1000,       -- load early if you set it as default
+  config = function()
+    -- optional: any plugin-specific config could go here
+    -- (github-nvim-theme typically doesn't require setup for basic use)
+  end,
+},
 
       -- THEMES ---------------------------------------
   {
@@ -322,20 +332,52 @@ local themes = {
   "onedark",
   "nightfox",
   "everforest",
+    -- GitHub theme variants (projekt0n/github-nvim-theme)
+  "github_dark",            -- "GitHub Dark"
+  "github_dark_dimmed",     -- "GitHub Dark Dimmed"
+  "github_dark_tritanopia", -- "GitHub Dark (tritanopia)"
+  "github_dark_default",    -- some users reference this; fallback to github_dark if not present
+  "github_light"           -- "GitHub Light"
 }
 
 local current_theme_index = 1
 
+
+-- Apply theme safely
 local function apply_theme(idx)
   if idx < 1 or idx > #themes then return end
+
   current_theme_index = idx
-  local ok, err = pcall(vim.cmd.colorscheme, themes[idx])
+  local theme = themes[idx]
+
+  local ok, err = pcall(vim.cmd, "colorscheme " .. theme)
   if not ok then
-    vim.notify("Error loading theme: " .. themes[idx] .. "\n" .. err, vim.log.levels.ERROR)
+    vim.notify("Could not load theme: " .. theme .. "\n" .. err,
+      vim.log.levels.WARN
+    )
+
+    -- fallback theme
+    pcall(vim.cmd, "colorscheme github_dark")
   else
-    vim.notify("Theme: " .. themes[idx])
+    vim.notify("Theme: " .. theme)
   end
 end
+
+
+-- KEYMAPS: Switch themes quickly
+vim.keymap.set("n", "<leader>tn", function()
+  apply_theme((current_theme_index % #themes) + 1)
+end)
+
+vim.keymap.set("n", "<leader>tp", function()
+  local prev = current_theme_index - 1
+  if prev < 1 then prev = #themes end
+  apply_theme(prev)
+end)
+
+
+-- Load initial theme when NVIM starts
+apply_theme(current_theme_index)
 
 -- ---------- Basic options ----------
 vim.o.number = true
@@ -586,7 +628,13 @@ require("lazy").setup({
 -- =========================
 -- KEYMAPS (below plugins)
 -- =========================
---
+---- Window navigation (Ctrl + h/j/k/l)
+vim.keymap.set("n", "<C-h>", "<C-w>h")  -- move to left split
+vim.keymap.set("n", "<C-l>", "<C-w>l")  -- move to right split
+vim.keymap.set("n", "<C-j>", "<C-w>j")  -- move to split below
+vim.keymap.set("n", "<C-k>", "<C-w>k")  -- move to split above
+
+
 vim.keymap.set("n", "<C-Right>", ":vertical resize +5<CR>")
 vim.keymap.set("n", "<C-Left>", ":vertical resize -5<CR>")
 
