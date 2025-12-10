@@ -34,7 +34,6 @@ require("lazy").setup({
   "nvim-tree/nvim-web-devicons",
   lazy = true,
 },
-
       -- TABS BAR (like Sublime / VS Code)
   {
     "akinsho/bufferline.nvim",
@@ -53,7 +52,8 @@ require("lazy").setup({
     end,
   },
 
-  -- COMMENT TOGGLE (Ctrl+/ like VS Code)
+
+ -- COMMENT TOGGLE (Ctrl+/ like VS Code)
   {
     "numToStr/Comment.nvim",
     config = function()
@@ -177,58 +177,6 @@ require("lazy").setup({
     end,
   },
 
-  -- MASON (LSP installer)
-  {
-    "williamboman/mason.nvim",
-    config = function()
-      require("mason").setup()
-    end,
-  },
-
-  -- LSP CONFIG (language servers)
-  {
-    "williamboman/mason-lspconfig.nvim",
-    dependencies = { "neovim/nvim-lspconfig", "hrsh7th/cmp-nvim-lsp" },
-    config = function()
-      require("mason-lspconfig").setup({
-        ensure_installed = {
-          "pyright",   -- Python
-          "tsserver",  -- JS / TS
-          "lua_ls",    -- Lua
-          "html",
-          "cssls",
-          "jsonls",
-          "clangd",    -- C / C++
-          "bashls",    -- Bash
-          -- you can add "jdtls" later for Java if you want
-        },
-      })
-
-      local lspconfig = require("lspconfig")
-      local capabilities = require("cmp_nvim_lsp").default_capabilities()
-
-      local on_attach = function(_, bufnr)
-        local map = function(mode, lhs, rhs, desc)
-          vim.keymap.set(mode, lhs, rhs, { buffer = bufnr, desc = desc })
-        end
-        map("n", "gd", vim.lsp.buf.definition, "Goto definition")
-        map("n", "K", vim.lsp.buf.hover, "Hover")
-        map("n", "<leader>rn", vim.lsp.buf.rename, "Rename symbol")
-        map("n", "<leader>ca", vim.lsp.buf.code_action, "Code action")
-      end
-
-      local servers = {
-        "pyright", "tsserver", "lua_ls", "html", "cssls", "jsonls", "clangd", "bashls",
-      }
-
-      for _, server in ipairs(servers) do
-        lspconfig[server].setup({
-          capabilities = capabilities,
-          on_attach = on_attach,
-        })
-      end
-    end,
-  },
 
   -- AUTOCOMPLETE (nvim-cmp + LuaSnip)
   {
