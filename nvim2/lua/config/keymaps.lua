@@ -59,3 +59,7 @@ keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "F
 keymap.set("n", "<leader>tH", "<cmd>ToggleTerm size=100 direction=horizontal<cr>", { desc = "Max Terminal" })
 
 keymap.set("n", "<leader>cp", "<cmd>Copilot toggle<cr>", { desc = "Toggle Copilot" })
+
+-- Copy to system clipboard
+keymap.set("v", "<C-c>", '"+y', { desc = "Copy selection" })
+keymap.set("n", "<C-c>", 'gg"+yG', { desc = "Copy entire file" })

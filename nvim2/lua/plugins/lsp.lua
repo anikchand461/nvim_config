@@ -4,12 +4,12 @@ return {
 		"mason-org/mason.nvim",
 		opts = function(_, opts)
 			vim.list_extend(opts.ensure_installed, {
-				"luacheck",
-				"shellcheck",
-				"shfmt",
-				"tailwindcss-language-server",
-				"typescript-language-server",
-				"css-lsp",
+				-- "luacheck",
+				-- "shellcheck",
+				-- "shfmt",
+				-- "tailwindcss-language-server",
+				-- "typescript-language-server",
+				-- "css-lsp",
 			})
 		end,
 	},
@@ -18,15 +18,15 @@ return {
 	{
 		"neovim/nvim-lspconfig",
 		opts = {
-			inlay_hints = { enabled = true },
+			inlay_hints = { enabled = false },
 			---@type lspconfig.options
 			servers = {
-				cssls = {},
-				tailwindcss = {
-					root_dir = function(...)
-						return require("lspconfig.util").root_pattern(".git")(...)
-					end,
-				},
+				-- cssls = {},
+				-- tailwindcss = {
+				-- 	root_dir = function(...)
+				-- 		return require("lspconfig.util").root_pattern(".git")(...)
+				-- 	end,
+				-- },
 				tsserver = {
 					root_dir = function(...)
 						return require("lspconfig.util").root_pattern(".git")(...)
@@ -37,37 +37,37 @@ return {
 							inlayHints = {
 								includeInlayParameterNameHints = "literal",
 								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-								includeInlayFunctionParameterTypeHints = true,
+								includeInlayFunctionParameterTypeHints = false,
 								includeInlayVariableTypeHints = false,
-								includeInlayPropertyDeclarationTypeHints = true,
-								includeInlayFunctionLikeReturnTypeHints = true,
-								includeInlayEnumMemberValueHints = true,
+								includeInlayPropertyDeclarationTypeHints = false,
+								includeInlayFunctionLikeReturnTypeHints = false,
+								includeInlayEnumMemberValueHints = false,
 							},
 						},
 						javascript = {
 							inlayHints = {
 								includeInlayParameterNameHints = "all",
 								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
-								includeInlayFunctionParameterTypeHints = true,
-								includeInlayVariableTypeHints = true,
-								includeInlayPropertyDeclarationTypeHints = true,
-								includeInlayFunctionLikeReturnTypeHints = true,
-								includeInlayEnumMemberValueHints = true,
+								includeInlayFunctionParameterTypeHints = false,
+								includeInlayVariableTypeHints = false,
+								includeInlayPropertyDeclarationTypeHints = false,
+								includeInlayFunctionLikeReturnTypeHints = false,
+								includeInlayEnumMemberValueHints = false,
 							},
 						},
 					},
 				},
-				html = {},
+				-- html = {},
 				lua_ls = {
 					-- enabled = false,
-					single_file_support = true,
+					single_file_support = false,
 					settings = {
 						Lua = {
 							workspace = {
 								checkThirdParty = false,
 							},
 							completion = {
-								workspaceWord = true,
+								workspaceWord = false,
 								callSnippet = "Both",
 							},
 							misc = {
@@ -76,9 +76,9 @@ return {
 								},
 							},
 							hint = {
-								enable = true,
+								enable = false,
 								setType = false,
-								paramType = true,
+								paramType = false,
 								paramName = "Disable",
 								semicolon = "Disable",
 								arrayIndex = "Disable",
@@ -87,7 +87,7 @@ return {
 								privateName = { "^_" },
 							},
 							type = {
-								castNumberToInteger = true,
+								castNumberToInteger = false,
 							},
 							diagnostics = {
 								disable = { "incomplete-signature-doc", "trailing-space" },
@@ -116,7 +116,7 @@ return {
 								enable = false,
 								defaultConfig = {
 									indent_style = "space",
-									indent_size = "2",
+									indent_size = "3",
 									continuation_indent_size = "2",
 								},
 							},

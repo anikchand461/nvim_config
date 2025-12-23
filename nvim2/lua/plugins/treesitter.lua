@@ -4,10 +4,10 @@ return {
 		tag = "v0.9.1",
 		opts = {
 			ensure_installed = {
-				"javascript",
-				"typescript",
+				-- "javascript",
+				-- "typescript",
 				"css",
-				"gitignore",
+				-- "gitignore",
 				"graphql",
 				"http",
 				"json",
@@ -15,6 +15,7 @@ return {
 				"sql",
 				"vim",
 				"lua",
+				"python",
 			},
 			query_linter = {
 				enable = true,

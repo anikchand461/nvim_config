@@ -12,6 +12,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
+require("config.dashboard")
+
 -- Load LazyVim
 require("lazy").setup({
 	spec = {
@@ -20,6 +22,7 @@ require("lazy").setup({
 		{ import = "lazyvim.plugins.extras.linting.eslint" },
 		{ import = "lazyvim.plugins.extras.formatting.prettier" },
 		{ import = "lazyvim.plugins.extras.coding.copilot" },
+		{ import = "lazyvim.plugins.extras.util.autosave" },
 		{ import = "plugins" }, -- your custom plugins in lua/plugins/
 	},
 	defaults = {
