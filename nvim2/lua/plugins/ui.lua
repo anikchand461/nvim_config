@@ -7,6 +7,7 @@ return {
 		"nvim-lualine/lualine.nvim",
 		enabled = false,
 	},
+
 	-- messages, cmdline and the popupmenu
 	{
 		"folke/noice.nvim",
@@ -18,6 +19,7 @@ return {
 				},
 				opts = { skip = true },
 			})
+
 			local focused = true
 			vim.api.nvim_create_autocmd("FocusGained", {
 				callback = function()
@@ -29,6 +31,7 @@ return {
 					focused = false
 				end,
 			})
+
 			table.insert(opts.routes, 1, {
 				filter = {
 					cond = function()
@@ -41,7 +44,6 @@ return {
 
 			opts.commands = {
 				all = {
-					-- options for the message history that you get with `:Noice`
 					view = "split",
 					opts = { enter = true, format = "details" },
 					filter = {},
@@ -72,10 +74,10 @@ return {
 		},
 		opts = {
 			options = {
-				mode = "tabs", -- Show as tabs
-				show_buffer_close_icons = true, -- ✅ Show 'x' close button
-				show_close_icon = false, -- Optional: hide global close icon
-				separator_style = "slant", -- Optional: nicer look
+				mode = "tabs",
+				show_buffer_close_icons = true,
+				show_close_icon = false,
+				separator_style = "slant",
 			},
 		},
 	},
@@ -83,7 +85,6 @@ return {
 	-- filename
 	{
 		"b0o/incline.nvim",
-		dependencies = {},
 		event = "BufReadPre",
 		priority = 1200,
 		config = function()
@@ -97,7 +98,7 @@ return {
 					local filename = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(props.buf), ":t")
 					local ft_icon, ft_color = require("nvim-web-devicons").get_icon_color(filename)
 					local modified = vim.bo[props.buf].modified
-					local buffer = {
+					return {
 						ft_icon and { " ", ft_icon, " ", guibg = ft_color, guifg = helpers.contrast_color(ft_color) }
 							or "",
 						" ",
@@ -105,95 +106,70 @@ return {
 						" ",
 						guibg = "#363944",
 					}
-					return buffer
 				end,
 			})
 		end,
 	},
-	-- LazyGit integration with Telescope
+
+	-- LazyGit
 	{
 		"kdheepak/lazygit.nvim",
 		keys = {
-			{
-				";c",
-				":LazyGit<Return>",
-				silent = true,
-				noremap = true,
-			},
+			{ ";c", ":LazyGit<Return>", silent = true, noremap = true },
 		},
-		-- optional for floating window border decoration
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-		},
+		dependencies = { "nvim-lua/plenary.nvim" },
 	},
+
+	-- DB UI
 	{
 		"kristijanhusak/vim-dadbod-ui",
 		dependencies = {
 			{ "tpope/vim-dadbod", lazy = true },
 			{ "kristijanhusak/vim-dadbod-completion", ft = { "sql", "mysql", "plsql" }, lazy = true },
 		},
-		cmd = {
-			"DBUI",
-			"DBUIToggle",
-			"DBUIAddConnection",
-			"DBUIFindBuffer",
-		},
+		cmd = { "DBUI", "DBUIToggle", "DBUIAddConnection", "DBUIFindBuffer" },
 		init = function()
-			-- Your DBUI configuration
 			vim.g.db_ui_use_nerd_fonts = 1
 		end,
 		keys = {
-			{
-
-				"<leader>d",
-				"<cmd>NvimTreeClose<cr><cmd>tabnew<cr><bar><bar><cmd>DBUI<cr>",
-			},
+			{ "<leader>d", "<cmd>NvimTreeClose<cr><cmd>tabnew<cr><cmd>DBUI<cr>" },
 		},
 	},
+
+	-- ✅ FILE EXPLORER (nvim-tree)
 	{
 		"nvim-tree/nvim-tree.lua",
 		config = function()
 			require("nvim-tree").setup({
 				on_attach = function(bufnr)
 					local api = require("nvim-tree.api")
-
-					local function opts(desc)
-						return {
-							desc = "nvim-tree: " .. desc,
-							buffer = bufnr,
-							noremap = true,
-							silent = true,
-							nowait = true,
-						}
-					end
-
-					-- default mappings
 					api.config.mappings.default_on_attach(bufnr)
-
-					-- custom mappings
-					vim.keymap.set("n", "t", api.node.open.tab, opts("Tab"))
+					vim.keymap.set("n", "t", api.node.open.tab, { buffer = bufnr })
 				end,
+
 				actions = {
-					open_file = {
-						quit_on_open = true,
-					},
+					open_file = { quit_on_open = true },
 				},
-				sort = {
-					sorter = "case_sensitive",
-				},
+
+				sort = { sorter = "case_sensitive" },
+
 				view = {
 					width = 30,
 					relativenumber = true,
 				},
+
 				renderer = {
 					group_empty = true,
 				},
+
+				-- 🔥 FIX IS HERE
 				filters = {
-					dotfiles = true,
+					dotfiles = false, -- SHOW .env, .gitignore, etc
 					custom = {
 						"node_modules/.*",
 					},
 				},
+
 				log = {
 					enable = true,
 					truncate = true,
